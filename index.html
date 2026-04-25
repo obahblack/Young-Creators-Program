@@ -40,6 +40,7 @@ body{
 h1,h2,h3,h4{font-family:'Fredoka',sans-serif;font-weight:600;letter-spacing:-.01em;line-height:1.05}
 a{color:inherit;text-decoration:none}
 img,svg{max-width:100%;display:block}
+body{overflow-x:clip}
 .container{max-width:1240px;margin:0 auto;padding:0 24px}
 
 /* ============ NAV ============ */
@@ -87,6 +88,7 @@ img,svg{max-width:100%;display:block}
 .btn .arrow{width:28px;height:28px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;color:#fff;font-size:14px}
 .menu-toggle{display:none;background:none;border:none;cursor:pointer;padding:8px}
 .menu-toggle span{display:block;width:22px;height:2px;background:var(--ink);margin:4px 0;transition:.3s}
+.nav-cta-mobile{display:none}
 
 /* ============ HERO ============ */
 .hero{
@@ -144,18 +146,22 @@ img,svg{max-width:100%;display:block}
 .trust-text small{color:var(--muted);font-size:13px}
 .stars{color:var(--accent);font-size:14px;letter-spacing:1px}
 
-/* Hero image carousel — stacked layers */
+/* Hero image carousel — stacked layers, fluid scaling at any viewport.
+   All sizes/offsets are % of the carousel width so the composition
+   stays fully visible (no clipped side cards) and just scales down. */
 .hero-carousel{
   position:relative;margin:40px auto 0;
   max-width:1200px;width:100%;
-  height:560px;
-  --adj-x:380px;  /* distance from center for 1st-layer cards */
-  --far-x:520px;  /* distance from center for 2nd-layer cards */
+  aspect-ratio:1200/520;
+  --adj-x:31.67%;  /* 380/1200 — 1st-layer offset from center */
+  --far-x:43.33%;  /* 520/1200 — 2nd-layer offset from center */
 }
 .carousel-card{
   position:absolute;top:50%;left:50%;
-  border-radius:28px;overflow:hidden;
-  transition:width .9s cubic-bezier(.65,.05,.35,1),
+  border-radius:clamp(12px,2.4vw,28px);overflow:hidden;
+  transform:translate(-50%,-50%);
+  transition:left .9s cubic-bezier(.65,.05,.35,1),
+             width .9s cubic-bezier(.65,.05,.35,1),
              height .9s cubic-bezier(.65,.05,.35,1),
              opacity .9s ease,
              transform .9s cubic-bezier(.65,.05,.35,1);
@@ -171,31 +177,37 @@ img,svg{max-width:100%;display:block}
 .carousel-card.tint-sage{background:#D0E5B5}
 .carousel-card.tint-cream{background:#FFE3D1}
 
+/* Card heights are % of carousel height (which is itself derived
+   from carousel width via aspect-ratio). Using explicit height %
+   instead of per-card aspect-ratio so width AND height interpolate
+   smoothly during pos transitions — aspect-ratio doesn't animate
+   reliably across browsers, which made cards stretch mid-transition. */
 /* center — top-most, biggest */
 .carousel-card.pos-0{
-  width:min(710px,60vw);height:520px;z-index:10;
-  transform:translate(-50%,-50%);
+  width:59.17%;height:100%;z-index:10;
+  left:50%;
 }
 /* 1st-layer adjacent — slightly smaller, sits behind center */
 .carousel-card.pos-1-l{
-  width:240px;height:460px;z-index:5;
-  transform:translate(calc(-50% - var(--adj-x)),-50%);
+  width:20%;height:88.46%;z-index:5;
+  left:calc(50% - var(--adj-x));
 }
 .carousel-card.pos-1-r{
-  width:240px;height:460px;z-index:5;
-  transform:translate(calc(-50% + var(--adj-x)),-50%);
+  width:20%;height:88.46%;z-index:5;
+  left:calc(50% + var(--adj-x));
 }
 /* 2nd-layer far — smaller again, sits behind 1st-layer */
 .carousel-card.pos-2-l{
-  width:160px;height:400px;z-index:2;
-  transform:translate(calc(-50% - var(--far-x)),-50%);
+  width:13.33%;height:76.92%;z-index:2;
+  left:calc(50% - var(--far-x));
 }
 .carousel-card.pos-2-r{
-  width:160px;height:400px;z-index:2;
-  transform:translate(calc(-50% + var(--far-x)),-50%);
+  width:13.33%;height:76.92%;z-index:2;
+  left:calc(50% + var(--far-x));
 }
 .carousel-card.pos-hidden{
   width:0;height:0;opacity:0;z-index:0;
+  left:50%;
   transform:translate(-50%,-50%) scale(.3);
 }
 .hero-sparkle{
@@ -203,18 +215,6 @@ img,svg{max-width:100%;display:block}
   color:var(--accent);
   transform:rotate(-15deg);
   z-index:11;pointer-events:none;
-}
-@media (max-width:1100px){
-  .hero-carousel{--adj-x:280px;--far-x:400px;height:480px}
-  .carousel-card.pos-0{width:min(520px,56vw);height:440px}
-  .carousel-card.pos-1-l,.carousel-card.pos-1-r{width:180px;height:400px}
-  .carousel-card.pos-2-l,.carousel-card.pos-2-r{width:120px;height:340px}
-}
-@media (max-width:720px){
-  .hero-carousel{--adj-x:150px;--far-x:0;height:400px}
-  .carousel-card.pos-0{width:min(300px,78vw);height:360px}
-  .carousel-card.pos-1-l,.carousel-card.pos-1-r{width:110px;height:320px}
-  .carousel-card.pos-2-l,.carousel-card.pos-2-r{opacity:0;width:0;height:0}
 }
 
 /* Promo banner */
@@ -420,7 +420,8 @@ img,svg{max-width:100%;display:block}
   font-size:34px;color:var(--accent-2);line-height:1;flex-shrink:0;
 }
 @media (max-width:960px){
-  .why-visual{max-width:380px}
+  .why-visual{max-width:none;width:100%;aspect-ratio:auto;height:clamp(420px,60vw,640px)}
+  .why-visual img{height:100%}
   .why-badge.b1{left:-12px}
   .why-badge.b2{right:-12px}
 }
@@ -518,6 +519,10 @@ img,svg{max-width:100%;display:block}
   transition:background .2s, transform .2s;
 }
 .form-submit:hover{background:var(--accent-2);transform:translateY(-2px)}
+.form-submit:disabled{opacity:.6;cursor:not-allowed;transform:none}
+.form-status{margin:0;padding:12px 14px;border-radius:10px;font-size:14px;font-weight:500}
+.form-status.is-success{background:rgba(46,160,93,.1);color:#1f6b3f;border:1px solid rgba(46,160,93,.25)}
+.form-status.is-error{background:rgba(200,50,50,.08);color:#a02121;border:1px solid rgba(200,50,50,.25)}
 
 /* ============ FAQ ============ */
 .faq{padding:120px 0;background:var(--bg-alt)}
@@ -587,17 +592,24 @@ img,svg{max-width:100%;display:block}
 
 /* ============ RESPONSIVE ============ */
 @media (max-width:960px){
+  .nav{padding:0 12px}
+  .nav-inner{padding:8px 8px 8px 16px;gap:12px}
+  .logo{font-size:12px}
+  .nav-cta .btn-primary{display:none}
   .nav-links,.phone-pill{display:none}
+  .nav-links .nav-cta-mobile{display:block;margin-top:8px;padding-top:16px;border-top:1px solid var(--line);width:100%}
+  .nav-links .nav-cta-mobile .btn{width:100%;justify-content:center}
   .menu-toggle{display:block}
   .hero-grid,.about-grid,.why-grid{grid-template-columns:1fr;gap:48px}
   .hero-visual{max-width:400px;margin:0 auto}
-  .program-card{grid-template-columns:1fr;gap:24px;height:auto;position:static;top:auto}
+  .program-card{grid-template-columns:1fr;gap:24px;height:auto;padding-top:24px;padding-bottom:24px}
   .program-image{height:280px}
   .blog-grid{grid-template-columns:1fr}
   .register-card{grid-template-columns:1fr;gap:32px;padding:40px 28px}
   .form-row{grid-template-columns:1fr}
   .footer-grid{grid-template-columns:1fr 1fr;gap:32px}
   .cta-card,.why{padding:48px 24px;margin:0}
+  .why > .container{padding:0}
   .who-grid{grid-template-columns:1fr 1fr;grid-template-rows:auto auto auto;gap:18px}
   .who-image{grid-column:1/-1;grid-row:1;min-height:360px}
   .who-card--tl{grid-column:1;grid-row:2}
@@ -610,6 +622,9 @@ img,svg{max-width:100%;display:block}
 }
 @media (max-width:560px){
   .footer-grid{grid-template-columns:1fr}
+  .program-card{padding:24px 16px}
+  .register-card{padding:24px 16px}
+  .kid{width:200px;height:200px}
   .register-form{padding:24px}
   .hero-ctas{flex-direction:column;align-items:stretch}
   .btn{justify-content:center}
@@ -636,6 +651,14 @@ img,svg{max-width:100%;display:block}
       <li><a href="#tracks">Tracks</a></li>
       <li><a href="#programs">Program</a></li>
       <li><a href="#faq">FAQ</a></li>
+      <li class="nav-cta-mobile">
+        <a href="#register" class="btn btn-primary">
+          <span class="flower">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.5 0 2.8 1.2 2.8 2.8 0 .4-.1.8-.3 1.2 1.5-.5 3.2.1 4 1.5.8 1.4.3 3.1-1 4 .4.2.8.3 1.2.3C20.2 11.8 21.5 13 21.5 14.5S20.2 17.2 18.7 17.2c-.4 0-.8-.1-1.2-.3 1.3.9 1.7 2.6 1 4-.8 1.4-2.5 2-4 1.5.2.4.3.8.3 1.2 0 1.6-1.2 2.8-2.8 2.8s-2.8-1.2-2.8-2.8c0-.4.1-.8.3-1.2-1.5.5-3.2-.1-4-1.5-.8-1.4-.3-3.1 1-4-.4-.2-.8-.3-1.2-.3C3.8 17.2 2.5 16 2.5 14.5S3.8 11.8 5.3 11.8c.4 0 .8.1 1.2.3-1.3-.9-1.7-2.6-1-4 .8-1.4 2.5-2 4-1.5-.2-.4-.3-.8-.3-1.2C9.2 3.2 10.5 2 12 2zm0 9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/></svg>
+          </span>
+          Register Now
+        </a>
+      </li>
     </ul>
     <div class="nav-cta">
       <a href="#register" class="btn btn-primary">
@@ -691,8 +714,8 @@ img,svg{max-width:100%;display:block}
 
     <div class="promo-banner">
       <div class="marquee">
-        <span>This Summer Only <span class="star">✦</span> Ages 9–15 <span class="star">✦</span> Online &amp; In-Person <span class="star">✦</span> Limited Spots Available <span class="star">✦</span> Demo Day Finale <span class="star">✦</span></span>
-        <span>This Summer Only <span class="star">✦</span> Ages 9–15 <span class="star">✦</span> Online &amp; In-Person <span class="star">✦</span> Limited Spots Available <span class="star">✦</span> Demo Day Finale <span class="star">✦</span></span>
+        <span>This Summer Only <span class="star">✦</span> Ages 9–15 <span class="star">✦</span> Online <span class="star">✦</span> Limited Spots Available <span class="star">✦</span> Demo Day Finale <span class="star">✦</span></span>
+        <span>This Summer Only <span class="star">✦</span> Ages 9–15 <span class="star">✦</span> Online <span class="star">✦</span> Limited Spots Available <span class="star">✦</span> Demo Day Finale <span class="star">✦</span></span>
       </div>
     </div>
   </div>
@@ -704,7 +727,7 @@ img,svg{max-width:100%;display:block}
     <div class="about-grid">
       <div class="reveal">
         <div class="section-tag">About Young Creators Accelerator</div>
-        <h2>A joyful place for every child to thrive.</h2>
+        <h2>Helping kids build confidence by creating, not just consuming</h2>
         <a href="#register" class="btn btn-primary about-cta">
           <span class="flower">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.5 0 2.8 1.2 2.8 2.8 0 .4-.1.8-.3 1.2 1.5-.5 3.2.1 4 1.5.8 1.4.3 3.1-1 4 .4.2.8.3 1.2.3C20.2 11.8 21.5 13 21.5 14.5S20.2 17.2 18.7 17.2c-.4 0-.8-.1-1.2-.3 1.3.9 1.7 2.6 1 4-.8 1.4-2.5 2-4 1.5.2.4.3.8.3 1.2 0 1.6-1.2 2.8-2.8 2.8s-2.8-1.2-2.8-2.8c0-.4.1-.8.3-1.2-1.5.5-3.2-.1-4-1.5-.8-1.4-.3-3.1 1-4-.4-.2-.8-.3-1.2-.3C3.8 17.2 2.5 16 2.5 14.5S3.8 11.8 5.3 11.8c.4 0 .8.1 1.2.3-1.3-.9-1.7-2.6-1-4 .8-1.4 2.5-2 4-1.5-.2-.4-.3-.8-.3-1.2C9.2 3.2 10.5 2 12 2zm0 9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/></svg>
@@ -714,8 +737,8 @@ img,svg{max-width:100%;display:block}
       </div>
       <div class="reveal">
         <p>Kids have learnt all year — it's time to allow them to explore their creativity and turn their imagination into tangible products that will build their confidence, all from the comfort of home through our online program.</p>
-        <p>Most children are never taught how to execute an idea from start to finish. As adults, we see it all the time — brilliant ideas that never become reality. This summer, we are changing that with a fully online experience kids can join from anywhere.</p>
-        <p>This isn't another summer camp. At Young Creators Accelerator, kids learn the one skill that changes everything online: how to turn ideas into real-world results.</p>
+        <p>As adults, we see it all the time — brilliant ideas that never become reality. This summer, we are changing that with a fully online experience kids can join from anywhere.</p>
+        <p>This summer, we are training kids to execute with a fully online experience that kids can join from anywhere.</p>
       </div>
     </div>
 
@@ -725,7 +748,6 @@ img,svg{max-width:100%;display:block}
         <div class="kid kid--pillow kid--teal"><img src="https://images.pexels.com/photos/4709284/pexels-photo-4709284.jpeg" alt="Kid coding on a laptop" loading="lazy"></div>
         <div class="kid kid--rect kid--mauve"><img src="https://i.ibb.co/Q7TqkCtf/influencer-their-pet-creating-content-online-spaces-social-media.jpg" alt="Young content creator filming with their pet" loading="lazy"></div>
         <div class="kid kid--pillow kid--pink"><img src="https://images.pexels.com/photos/14274932/pexels-photo-14274932.jpeg" alt="Kid taking a photograph with a camera" loading="lazy"></div>
-        <div class="kid kid--rect kid--blue"><img src="https://images.pexels.com/photos/5429992/pexels-photo-5429992.jpeg" alt="Young entrepreneur selling at a market" loading="lazy"></div>
         <div class="kid kid--circle kid--sage"><img src="https://images.pexels.com/photos/4144174/pexels-photo-4144174.jpeg" alt="Kid creating on a tablet" loading="lazy"></div>
         <div class="kid kid--pillow kid--teal"><img src="https://i.ibb.co/WNJZFLMy/mother-with-daughters-grass.jpg" alt="Mother and daughters in a garden" loading="lazy"></div>
         <div class="kid kid--rect kid--mauve"><img src="https://images.pexels.com/photos/5905517/pexels-photo-5905517.jpeg" alt="Kid brainstorming on a whiteboard" loading="lazy"></div>
@@ -734,7 +756,6 @@ img,svg{max-width:100%;display:block}
         <div class="kid kid--pillow kid--teal" aria-hidden="true"><img src="https://images.pexels.com/photos/4709284/pexels-photo-4709284.jpeg" alt="" loading="lazy"></div>
         <div class="kid kid--rect kid--mauve" aria-hidden="true"><img src="https://i.ibb.co/Q7TqkCtf/influencer-their-pet-creating-content-online-spaces-social-media.jpg" alt="" loading="lazy"></div>
         <div class="kid kid--pillow kid--pink" aria-hidden="true"><img src="https://images.pexels.com/photos/14274932/pexels-photo-14274932.jpeg" alt="" loading="lazy"></div>
-        <div class="kid kid--rect kid--blue" aria-hidden="true"><img src="https://images.pexels.com/photos/5429992/pexels-photo-5429992.jpeg" alt="" loading="lazy"></div>
         <div class="kid kid--circle kid--sage" aria-hidden="true"><img src="https://images.pexels.com/photos/4144174/pexels-photo-4144174.jpeg" alt="" loading="lazy"></div>
         <div class="kid kid--pillow kid--teal" aria-hidden="true"><img src="https://i.ibb.co/WNJZFLMy/mother-with-daughters-grass.jpg" alt="" loading="lazy"></div>
         <div class="kid kid--rect kid--mauve" aria-hidden="true"><img src="https://images.pexels.com/photos/5905517/pexels-photo-5905517.jpeg" alt="" loading="lazy"></div>
@@ -970,7 +991,7 @@ img,svg{max-width:100%;display:block}
         </ul>
       </div>
 
-      <form class="register-form reveal" action="https://formspree.io/f/xeevnyed" method="POST">
+      <form id="register-form" class="register-form reveal" action="https://formspree.io/f/mjgjzknv" method="POST">
         <input type="hidden" name="_subject" value="New registration — Young Creators Accelerator">
         <div class="form-row">
           <div class="form-field">
@@ -1006,6 +1027,7 @@ img,svg{max-width:100%;display:block}
           <span>You agree to our <a href="#">privacy policy</a></span>
         </label>
         <button type="submit" class="form-submit">Send Message</button>
+        <p id="form-status" class="form-status" role="status" aria-live="polite" hidden></p>
       </form>
     </div>
   </div>
@@ -1171,6 +1193,47 @@ menuToggle?.addEventListener('click',()=>{
     navLinks.removeAttribute('style');
   }
 });
+
+// Formspree AJAX submission — keeps user on page and clears the form on success
+const registerForm = document.getElementById('register-form');
+if(registerForm){
+  const status = document.getElementById('form-status');
+  const submitBtn = registerForm.querySelector('.form-submit');
+  registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    status.hidden = true;
+    status.classList.remove('is-success','is-error');
+    submitBtn.disabled = true;
+    const originalLabel = submitBtn.textContent;
+    submitBtn.textContent = 'Sending…';
+    try{
+      const res = await fetch(registerForm.action, {
+        method: 'POST',
+        body: new FormData(registerForm),
+        headers: { 'Accept': 'application/json' }
+      });
+      if(res.ok){
+        registerForm.reset();
+        status.textContent = 'Thanks! Your registration has been sent.';
+        status.classList.add('is-success');
+        status.hidden = false;
+      } else {
+        const data = await res.json().catch(() => ({}));
+        const msg = (data.errors && data.errors.map(x => x.message).join(', ')) || 'Something went wrong. Please try again.';
+        status.textContent = msg;
+        status.classList.add('is-error');
+        status.hidden = false;
+      }
+    } catch {
+      status.textContent = 'Network error. Please check your connection and try again.';
+      status.classList.add('is-error');
+      status.hidden = false;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = originalLabel;
+    }
+  });
+}
 </script>
 
 </body>
