@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Young Creators Accelerator — A Summer Program for Kids Ages 9–15</title>
+<title>Young Creators Accelerator, A Summer Program for Kids Ages 9-15</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -80,6 +80,8 @@ body{overflow-x:clip}
 .btn-accent:hover{background:var(--accent-2);transform:translateY(-2px)}
 .btn-outline{background:transparent;color:var(--ink);border:1.5px solid var(--ink);padding:14px 28px}
 .btn-outline:hover{background:var(--ink);color:#fff}
+.btn-ink{background:var(--ink);color:#fff;padding:14px 28px}
+.btn-ink:hover{background:var(--ink-soft);transform:translateY(-2px)}
 .btn .flower{
   width:40px;height:40px;border-radius:50%;background:#ffffff;
   display:flex;align-items:center;justify-content:center;
@@ -659,9 +661,84 @@ body{overflow-x:clip}
   .tracks-grid{grid-template-columns:1fr}
 }
 
+/* ============ MENTORS ============ */
+.mentors{padding:120px 0;background:#ffffff}
+.mentors-head{text-align:center;margin-bottom:64px;display:flex;flex-direction:column;align-items:center;gap:16px}
+.mentors-head .section-tag{justify-content:center;margin-bottom:0}
+.mentors-head h2{font-size:clamp(36px,4.5vw,60px);max-width:720px}
+.mentors-head p{color:var(--ink-soft);max-width:580px;margin:0 auto;font-size:17px;line-height:1.6}
+.mentors-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:28px;
+}
+.mentor-card{
+  background:var(--ink);color:#fff;border:1px solid var(--ink);border-radius:var(--radius);
+  padding:32px 28px;display:flex;flex-direction:column;gap:16px;
+  transition:transform .25s ease,box-shadow .25s ease;
+}
+.mentor-card:hover{transform:translateY(-4px);box-shadow:0 18px 40px rgba(27,50,40,.18)}
+.mentor-avatar{
+  width:88px;height:88px;border-radius:50%;
+  background:var(--accent-soft);
+  display:flex;align-items:center;justify-content:center;
+  font-size:48px;line-height:1;
+  flex-shrink:0;
+}
+.mentor-card h3{font-size:22px;font-family:'Fredoka',sans-serif;font-weight:600;line-height:1.2;color:#fff}
+.mentor-role{
+  font-size:13px;font-weight:600;color:var(--accent);
+  text-transform:uppercase;letter-spacing:.08em;margin-top:-8px;
+}
+.mentor-card p{font-size:15px;color:rgba(255,255,255,.78);line-height:1.6;margin:0}
+@media (max-width:960px){
+  .mentors-grid{grid-template-columns:1fr;gap:20px}
+}
+
 /* Reveal animation */
 .reveal{opacity:0;transform:translateY(30px);transition:opacity .8s ease,transform .8s ease}
 .reveal.in{opacity:1;transform:none}
+
+/* ============ PRIVACY MODAL ============ */
+.modal{
+  position:fixed;inset:0;z-index:1000;
+  display:none;align-items:center;justify-content:center;
+  background:rgba(20,30,25,.55);
+  padding:20px;
+  opacity:0;transition:opacity .2s ease;
+}
+.modal.is-open{display:flex;opacity:1}
+.modal-card{
+  background:#fff;border-radius:18px;
+  max-width:640px;width:100%;
+  max-height:85vh;display:flex;flex-direction:column;
+  box-shadow:0 30px 80px rgba(20,30,25,.25);
+  transform:translateY(10px);transition:transform .25s ease;
+}
+.modal.is-open .modal-card{transform:none}
+.modal-head{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:22px 26px;border-bottom:1px solid var(--line);
+}
+.modal-head h3{font-size:22px;font-family:'Fredoka',sans-serif;font-weight:600;margin:0}
+.modal-close{
+  background:transparent;border:none;cursor:pointer;
+  font-size:26px;line-height:1;color:var(--ink-soft);
+  padding:4px 8px;border-radius:8px;
+}
+.modal-close:hover{background:var(--line);color:var(--ink)}
+.modal-body{
+  padding:22px 26px;overflow-y:auto;
+  font-size:15px;color:var(--ink-soft);line-height:1.65;
+}
+.modal-body h4{
+  font-size:16px;font-family:'Fredoka',sans-serif;font-weight:600;
+  color:var(--ink);margin:18px 0 8px;
+}
+.modal-body h4:first-child{margin-top:0}
+.modal-body p{margin:0 0 12px}
+.modal-body ul{margin:0 0 12px;padding-left:20px}
+.modal-body li{margin-bottom:6px}
+.modal-body a{color:var(--accent);text-decoration:underline}
+body.modal-open{overflow:hidden}
 </style>
 </head>
 <body>
@@ -681,7 +758,7 @@ body{overflow-x:clip}
           <span class="flower">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.5 0 2.8 1.2 2.8 2.8 0 .4-.1.8-.3 1.2 1.5-.5 3.2.1 4 1.5.8 1.4.3 3.1-1 4 .4.2.8.3 1.2.3C20.2 11.8 21.5 13 21.5 14.5S20.2 17.2 18.7 17.2c-.4 0-.8-.1-1.2-.3 1.3.9 1.7 2.6 1 4-.8 1.4-2.5 2-4 1.5.2.4.3.8.3 1.2 0 1.6-1.2 2.8-2.8 2.8s-2.8-1.2-2.8-2.8c0-.4.1-.8.3-1.2-1.5.5-3.2-.1-4-1.5-.8-1.4-.3-3.1 1-4-.4-.2-.8-.3-1.2-.3C3.8 17.2 2.5 16 2.5 14.5S3.8 11.8 5.3 11.8c.4 0 .8.1 1.2.3-1.3-.9-1.7-2.6-1-4 .8-1.4 2.5-2 4-1.5-.2-.4-.3-.8-.3-1.2C9.2 3.2 10.5 2 12 2zm0 9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/></svg>
           </span>
-          Register Now
+          Sign Up
         </a>
       </li>
     </ul>
@@ -690,7 +767,7 @@ body{overflow-x:clip}
         <span class="flower">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.5 0 2.8 1.2 2.8 2.8 0 .4-.1.8-.3 1.2 1.5-.5 3.2.1 4 1.5.8 1.4.3 3.1-1 4 .4.2.8.3 1.2.3C20.2 11.8 21.5 13 21.5 14.5S20.2 17.2 18.7 17.2c-.4 0-.8-.1-1.2-.3 1.3.9 1.7 2.6 1 4-.8 1.4-2.5 2-4 1.5.2.4.3.8.3 1.2 0 1.6-1.2 2.8-2.8 2.8s-2.8-1.2-2.8-2.8c0-.4.1-.8.3-1.2-1.5.5-3.2-.1-4-1.5-.8-1.4-.3-3.1 1-4-.4-.2-.8-.3-1.2-.3C3.8 17.2 2.5 16 2.5 14.5S3.8 11.8 5.3 11.8c.4 0 .8.1 1.2.3-1.3-.9-1.7-2.6-1-4 .8-1.4 2.5-2 4-1.5-.2-.4-.3-.8-.3-1.2C9.2 3.2 10.5 2 12 2zm0 9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/></svg>
         </span>
-        Register Now
+        Sign Up
       </a>
       <button class="menu-toggle" aria-label="Menu"><span></span><span></span><span></span></button>
     </div>
@@ -703,14 +780,15 @@ body{overflow-x:clip}
     <h1 class="reveal">
       Let your ideas<br>come to <span class="highlight">LIFE</span>
     </h1>
-    <p class="reveal">A hands-on online summer program where kids don't just learn —<br>they build, create, and launch real projects for their portfolio.</p>
+    <p class="reveal">A hands-on online summer program where kids don't just learn,<br>they build, create, and launch real projects for their portfolio.</p>
     <div class="hero-ctas reveal">
       <a href="#register" class="btn btn-primary">
         <span class="flower">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.5 0 2.8 1.2 2.8 2.8 0 .4-.1.8-.3 1.2 1.5-.5 3.2.1 4 1.5.8 1.4.3 3.1-1 4 .4.2.8.3 1.2.3C20.2 11.8 21.5 13 21.5 14.5S20.2 17.2 18.7 17.2c-.4 0-.8-.1-1.2-.3 1.3.9 1.7 2.6 1 4-.8 1.4-2.5 2-4 1.5.2.4.3.8.3 1.2 0 1.6-1.2 2.8-2.8 2.8s-2.8-1.2-2.8-2.8c0-.4.1-.8.3-1.2-1.5.5-3.2-.1-4-1.5-.8-1.4-.3-3.1 1-4-.4-.2-.8-.3-1.2-.3C3.8 17.2 2.5 16 2.5 14.5S3.8 11.8 5.3 11.8c.4 0 .8.1 1.2.3-1.3-.9-1.7-2.6-1-4 .8-1.4 2.5-2 4-1.5-.2-.4-.3-.8-.3-1.2C9.2 3.2 10.5 2 12 2zm0 9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/></svg>
         </span>
-        Register Now
+        Sign Up
       </a>
+      <a href="#tracks" class="btn btn-ink">View Tracks</a>
     </div>
 
     <div class="hero-carousel reveal">
@@ -739,8 +817,8 @@ body{overflow-x:clip}
 
     <div class="promo-banner">
       <div class="marquee">
-        <span>This Summer Only <span class="star">✦</span> June 8 – July 4 <span class="star">✦</span> Ages 9–15 <span class="star">✦</span> Online <span class="star">✦</span> Limited Spots Available <span class="star">✦</span> Demo Day Finale <span class="star">✦</span></span>
-        <span>This Summer Only <span class="star">✦</span> June 8 – July 4 <span class="star">✦</span> Ages 9–15 <span class="star">✦</span> Online <span class="star">✦</span> Limited Spots Available <span class="star">✦</span> Demo Day Finale <span class="star">✦</span></span>
+        <span>This Summer Only <span class="star">✦</span> June 8 to July 4 <span class="star">✦</span> Ages 9-15 <span class="star">✦</span> Online <span class="star">✦</span> Limited Spots Available <span class="star">✦</span> Demo Day Finale <span class="star">✦</span></span>
+        <span>This Summer Only <span class="star">✦</span> June 8 to July 4 <span class="star">✦</span> Ages 9-15 <span class="star">✦</span> Online <span class="star">✦</span> Limited Spots Available <span class="star">✦</span> Demo Day Finale <span class="star">✦</span></span>
       </div>
     </div>
   </div>
@@ -765,7 +843,7 @@ body{overflow-x:clip}
       </div>
       <div class="countdown-dates">
         <span class="countdown-eyebrow">Program Dates</span>
-        <span class="countdown-title">June 8 – July 4</span>
+        <span class="countdown-title">June 8 to July 4</span>
       </div>
     </div>
   </div>
@@ -782,12 +860,12 @@ body{overflow-x:clip}
           <span class="flower">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.5 0 2.8 1.2 2.8 2.8 0 .4-.1.8-.3 1.2 1.5-.5 3.2.1 4 1.5.8 1.4.3 3.1-1 4 .4.2.8.3 1.2.3C20.2 11.8 21.5 13 21.5 14.5S20.2 17.2 18.7 17.2c-.4 0-.8-.1-1.2-.3 1.3.9 1.7 2.6 1 4-.8 1.4-2.5 2-4 1.5.2.4.3.8.3 1.2 0 1.6-1.2 2.8-2.8 2.8s-2.8-1.2-2.8-2.8c0-.4.1-.8.3-1.2-1.5.5-3.2-.1-4-1.5-.8-1.4-.3-3.1 1-4-.4-.2-.8-.3-1.2-.3C3.8 17.2 2.5 16 2.5 14.5S3.8 11.8 5.3 11.8c.4 0 .8.1 1.2.3-1.3-.9-1.7-2.6-1-4 .8-1.4 2.5-2 4-1.5-.2-.4-.3-.8-.3-1.2C9.2 3.2 10.5 2 12 2zm0 9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/></svg>
           </span>
-          Register Now
+          Sign Up
         </a>
       </div>
       <div class="reveal">
-        <p>Kids have learnt all year — it's time to allow them to explore their creativity and turn their imagination into tangible products that will build their confidence, all from the comfort of home through our online program.</p>
-        <p>As adults, we see it all the time — brilliant ideas that never become reality. This summer, we are changing that with a fully online experience kids can join from anywhere.</p>
+        <p>Kids have learnt all year, it's time to allow them to explore their creativity and turn their imagination into tangible products that will build their confidence, all from the comfort of home through our online program.</p>
+        <p>As adults, we see it all the time, brilliant ideas that never become reality. This summer, we are changing that with a fully online experience kids can join from anywhere.</p>
         <p>This summer, we are training kids to execute with a fully online experience that kids can join from anywhere.</p>
       </div>
     </div>
@@ -822,7 +900,7 @@ body{overflow-x:clip}
         <div class="section-tag">Project Tracks</div>
         <h2>Five Tracks To Match Every Spark</h2>
       </div>
-      <p>Every kid picks the path that lights them up — five focused tracks, each ending in a real, finished project.</p>
+      <p>Every kid picks the path that lights them up, with five focused tracks, each ending in a real, finished project.</p>
     </div>
     <div class="tracks-grid">
       <div class="track-image reveal">
@@ -870,7 +948,7 @@ body{overflow-x:clip}
         <div class="section-tag">Our Programs</div>
         <h2>Program Structure</h2>
       </div>
-      <p>A four-week online journey from spark to launch — turning bold ideas into real, finished creations.</p>
+      <p>A four-week online journey from spark to launch, turning bold ideas into real, finished creations.</p>
     </div>
     <div class="programs-grid">
       <article class="program-card reveal">
@@ -887,7 +965,7 @@ body{overflow-x:clip}
         <div class="program-text">
           <span class="program-week">Week 2</span>
           <h3>Planning &amp; Design</h3>
-          <p>From sketches to storyboards, kids turn raw ideas into clear plans—learning to map out the steps that take a concept toward reality.</p>
+          <p>From sketches to storyboards, kids turn raw ideas into clear plans, learning to map out the steps that take a concept toward reality.</p>
         </div>
         <div class="program-image">
           <img src="https://images.pexels.com/photos/8423096/pexels-photo-8423096.jpeg" alt="Kid sketching a design on paper" loading="lazy">
@@ -897,7 +975,7 @@ body{overflow-x:clip}
         <div class="program-text">
           <span class="program-week">Week 3</span>
           <h3>Build &amp; Execute</h3>
-          <p>Hands-on creation: kids prototype, test, and iterate—turning their plans into real, tangible products they can hold and show off.</p>
+          <p>Hands-on creation: kids prototype, test, and iterate, turning their plans into real, tangible products they can hold and show off.</p>
         </div>
         <div class="program-image">
           <img src="https://images.pexels.com/photos/17771095/pexels-photo-17771095.jpeg" alt="Teen coding on a desktop computer at night" loading="lazy">
@@ -907,7 +985,7 @@ body{overflow-x:clip}
         <div class="program-text">
           <span class="program-week">Week 4</span>
           <h3>Present &amp; Launch</h3>
-          <p>Kids share their finished creations with family, friends, and peers—building confidence and learning what it takes to ship an idea into the world.</p>
+          <p>Kids share their finished creations with family, friends, and peers, building confidence and learning what it takes to ship an idea into the world.</p>
         </div>
         <div class="program-image">
           <img src="https://images.pexels.com/photos/7869092/pexels-photo-7869092.jpeg" alt="Kids holding their finished robot car projects" loading="lazy">
@@ -924,27 +1002,27 @@ body{overflow-x:clip}
       <div class="reveal">
         <div class="section-tag">Why This Matters</div>
         <h2>Why This Skill Changes Everything</h2>
-        <p>Because knowing what to do isn't enough. Your child won't just leave with memories — they'll leave with proof of what they can do.</p>
+        <p>Because knowing what to do isn't enough. Your child won't just leave with memories, they'll leave with proof of what they can do.</p>
         <ul class="feature-list">
           <li>
             <div class="check">✓</div>
             <div>
               <strong>Start</strong>
-              <span>The hardest part of any creation is the first move — kids learn to take their ideas seriously and just begin.</span>
+              <span>The hardest part of any creation is the first move, so kids learn to take their ideas seriously and just begin.</span>
             </div>
           </li>
           <li>
             <div class="check">✓</div>
             <div>
               <strong>Stay consistent</strong>
-              <span>Showing up daily is what separates dreamers from doers — kids build the habit of pushing through the messy middle.</span>
+              <span>Showing up daily is what separates dreamers from doers, so kids build the habit of pushing through the messy middle.</span>
             </div>
           </li>
           <li>
             <div class="check">✓</div>
             <div>
               <strong>Finish</strong>
-              <span>A finished idea beats a brilliant one abandoned — kids learn what it feels like to ship and call something done.</span>
+              <span>A finished idea beats a brilliant one abandoned, so kids learn what it feels like to ship and call something done.</span>
             </div>
           </li>
         </ul>
@@ -970,7 +1048,7 @@ body{overflow-x:clip}
     <div class="who-head reveal">
       <div class="section-tag">Who It's For</div>
       <h2>Who This Is For</h2>
-      <p>Built for kids ready to explore, create, and grow — wherever they're starting from. No background required, just curiosity and a spark.</p>
+      <p>Built for kids ready to explore, create, and grow, wherever they're starting from. No background required, just curiosity and a spark.</p>
     </div>
     <div class="who-grid reveal">
       <div class="who-card who-card--tl">
@@ -989,12 +1067,43 @@ body{overflow-x:clip}
       <div class="who-card who-card--bl">
         <div class="who-icon">🛠️</div>
         <h4>Hands-On Learners</h4>
-        <p>For kids who learn best by doing — not just by listening or watching.</p>
+        <p>For kids who learn best by doing, not just by listening or watching.</p>
       </div>
       <div class="who-card who-card--br">
         <div class="who-icon">🚀</div>
         <h4>No Experience Needed</h4>
-        <p>No prior experience required — just a willingness to try something new.</p>
+        <p>No prior experience required, just a willingness to try something new.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ MENTORS ============ -->
+<section class="mentors" id="mentors">
+  <div class="container">
+    <div class="mentors-head reveal">
+      <div class="section-tag">Team</div>
+      <h2>Lead Project Mentors</h2>
+      <p>Meet the mentors guiding your child through every track, blending real-world expertise with hands-on coaching.</p>
+    </div>
+    <div class="mentors-grid">
+      <div class="mentor-card reveal">
+        <div class="mentor-avatar" aria-hidden="true">👩</div>
+        <h3>Tola</h3>
+        <span class="mentor-role">Marketing Strategist</span>
+        <p>Tola is a Yale-trained Marketing Strategist with a focus on sustainability and innovation. Her work centers on transforming ideas into viable, real-world solutions, an approach she brings directly into the program. She mentors students to think strategically, develop strong concepts, and execute with clarity, guiding them through project tracks such as business creation, branding, and solution-based design. Her emphasis on structure, creativity, and high standards helps students produce work they can confidently stand behind.</p>
+      </div>
+      <div class="mentor-card reveal">
+        <div class="mentor-avatar" aria-hidden="true">👩</div>
+        <h3>Joy</h3>
+        <span class="mentor-role">Economist &amp; Creative</span>
+        <p>Joy is an economics graduate with expertise in financial modeling, design, and multidisciplinary creative expression. Her work blends analytical rigor with artistic versatility, spanning podcasting, visual arts, music, and multilingual communication. As a program mentor, she challenges students to refine their ideas, think critically, and express themselves with precision across formats. Her approach encourages originality, depth, and a level of execution that sets students apart.</p>
+      </div>
+      <div class="mentor-card reveal">
+        <div class="mentor-avatar" aria-hidden="true">👨</div>
+        <h3>Praise</h3>
+        <span class="mentor-role">Engineer &amp; AI Specialist</span>
+        <p>Praise is an Electrical and Electronics Engineering graduate, Product Designer, and AI Specialist focused on building practical, user-centered digital solutions. He combines engineering logic, intelligent systems, and design to create scalable web applications and meaningful user experiences.</p>
       </div>
     </div>
   </div>
@@ -1006,8 +1115,9 @@ body{overflow-x:clip}
     <div class="register-card reveal">
       <div class="register-info">
         <div class="section-tag">Register</div>
-        <h2>Reserve Your Spot</h2>
-        <p>Young Creator Launch Camp is a fully virtual summer program where kids turn ideas into real, finished projects. Reserve a seat or send us a question — we usually reply within a day.</p>
+        <h2>Secure Your Spot Now</h2>
+        <p>Young Creator Launch Camp is a fully virtual summer program where kids turn ideas into real, finished projects. Reserve a seat or send us a question, we usually reply within a day.</p>
+        <p style="font-size:22px;color:var(--ink);"><strong>Program Fee: $500</strong></p>
         <p>Have questions about the program or how it fits your child?</p>
 
         <div class="register-divider"></div>
@@ -1042,20 +1152,20 @@ body{overflow-x:clip}
       </div>
 
       <form id="register-form" class="register-form reveal" action="https://formspree.io/f/mjgjzknv" method="POST">
-        <input type="hidden" name="_subject" value="New registration — Young Creators Accelerator">
+        <input type="hidden" name="_subject" value="New registration, Young Creators Accelerator">
+        <div class="form-field">
+          <label for="childName">Child's Name <span class="req">*</span></label>
+          <input id="childName" name="childName" type="text" placeholder="Jane Doe" required>
+        </div>
         <div class="form-row">
           <div class="form-field">
-            <label for="firstName">First Name <span class="req">*</span></label>
-            <input id="firstName" name="firstName" type="text" placeholder="John" required>
+            <label for="age">Age <span class="req">*</span></label>
+            <input id="age" name="age" type="number" min="9" max="15" placeholder="9-15" required>
           </div>
           <div class="form-field">
-            <label for="lastName">Last Name <span class="req">*</span></label>
-            <input id="lastName" name="lastName" type="text" placeholder="Doe" required>
+            <label for="grade">Grade <span class="req">*</span></label>
+            <input id="grade" name="grade" type="text" placeholder="e.g. 6th" required>
           </div>
-        </div>
-        <div class="form-field">
-          <label for="email">Email <span class="req">*</span></label>
-          <input id="email" name="email" type="email" placeholder="email@example.com" required>
         </div>
         <div class="form-field">
           <label for="track">Choose Track <span class="req">*</span></label>
@@ -1069,14 +1179,18 @@ body{overflow-x:clip}
           </select>
         </div>
         <div class="form-field">
+          <label for="email">Email <span class="req">*</span></label>
+          <input id="email" name="email" type="email" placeholder="email@example.com" required>
+        </div>
+        <div class="form-field">
           <label for="message">Additional Message</label>
           <textarea id="message" name="message" rows="4" placeholder="Kindly provide any additional details (optional)"></textarea>
         </div>
         <label class="form-check">
           <input type="checkbox" required>
-          <span>You agree to our <a href="#">privacy policy</a></span>
+          <span>You agree to our <a href="#" id="privacy-link">privacy policy &amp; terms and conditions</a></span>
         </label>
-        <button type="submit" class="form-submit">Send Message</button>
+        <button type="submit" class="form-submit">Pay &amp; Sign Up</button>
         <p id="form-status" class="form-status" role="status" aria-live="polite" hidden></p>
       </form>
     </div>
@@ -1091,16 +1205,16 @@ body{overflow-x:clip}
         <div class="section-tag">FAQ</div>
         <h2>Frequently Asked Questions</h2>
       </div>
-      <p>Everything you need to know about the Young Creators Accelerator — and if your question isn't here, just send us a message.</p>
+      <p>Everything you need to know about the Young Creators Accelerator, and if your question isn't here, just send us a message.</p>
     </div>
     <div class="faq-list">
       <details class="faq-item reveal">
         <summary>What ages is the program for?<span class="faq-toggle">+</span></summary>
-        <div class="faq-answer">The Young Creators Accelerator is built for kids ages 9–15. Activities, mentorship, and project tracks are tailored so younger and older kids alike are challenged at the right level.</div>
+        <div class="faq-answer">The Young Creators Accelerator is built for kids ages 9-15. Activities, mentorship, and project tracks are tailored so younger and older kids alike are challenged at the right level.</div>
       </details>
       <details class="faq-item reveal">
         <summary>How long is the program and when does it run?<span class="faq-toggle">+</span></summary>
-        <div class="faq-answer">It's a 4-week summer experience. Kids move through four stages — Ideate, Plan &amp; Design, Build &amp; Execute, and Present &amp; Launch — finishing with a live Demo Day where they showcase their project.</div>
+        <div class="faq-answer">It's a 4-week summer experience. Kids move through four stages (Ideate, Plan &amp; Design, Build &amp; Execute, and Present &amp; Launch), finishing with a live Demo Day where they showcase their project.</div>
       </details>
       <details class="faq-item reveal">
         <summary>Is the program online or in-person?<span class="faq-toggle">+</span></summary>
@@ -1108,11 +1222,11 @@ body{overflow-x:clip}
       </details>
       <details class="faq-item reveal">
         <summary>Does my child need prior experience or special equipment?<span class="faq-toggle">+</span></summary>
-        <div class="faq-answer">No prior experience needed — just curiosity. For online participants, a laptop or desktop with a webcam and stable internet is all that's required.</div>
+        <div class="faq-answer">No prior experience needed, just curiosity. For online participants, a laptop or desktop with a webcam and stable internet is all that's required.</div>
       </details>
       <details class="faq-item reveal">
         <summary>What will my child walk away with?<span class="faq-toggle">+</span></summary>
-        <div class="faq-answer">A finished project they built end-to-end, plus the confidence and real-world skills that come from shipping it — collaboration, problem-solving, and presenting their work to a live audience on Demo Day.</div>
+        <div class="faq-answer">A finished project they built end-to-end, plus the confidence and real-world skills that come from shipping it: collaboration, problem-solving, and presenting their work to a live audience on Demo Day.</div>
       </details>
     </div>
   </div>
@@ -1124,13 +1238,13 @@ body{overflow-x:clip}
     <div class="cta-card reveal">
       <div class="section-tag">Get Started</div>
       <h2>Ready to bring your child's<br>ideas to life?</h2>
-      <p>Spots are limited this summer — reserve your child's seat and give them the experience of building, shipping, and presenting a real project they're proud of.</p>
+      <p>Spots are limited this summer, so reserve your child's seat and give them the experience of building, shipping, and presenting a real project they're proud of.</p>
       <div class="cta-ctas">
         <a href="#register" class="btn btn-primary">
           <span class="flower">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c1.5 0 2.8 1.2 2.8 2.8 0 .4-.1.8-.3 1.2 1.5-.5 3.2.1 4 1.5.8 1.4.3 3.1-1 4 .4.2.8.3 1.2.3C20.2 11.8 21.5 13 21.5 14.5S20.2 17.2 18.7 17.2c-.4 0-.8-.1-1.2-.3 1.3.9 1.7 2.6 1 4-.8 1.4-2.5 2-4 1.5.2.4.3.8.3 1.2 0 1.6-1.2 2.8-2.8 2.8s-2.8-1.2-2.8-2.8c0-.4.1-.8.3-1.2-1.5.5-3.2-.1-4-1.5-.8-1.4-.3-3.1 1-4-.4-.2-.8-.3-1.2-.3C3.8 17.2 2.5 16 2.5 14.5S3.8 11.8 5.3 11.8c.4 0 .8.1 1.2.3-1.3-.9-1.7-2.6-1-4 .8-1.4 2.5-2 4-1.5-.2-.4-.3-.8-.3-1.2C9.2 3.2 10.5 2 12 2zm0 9a3.5 3.5 0 100 7 3.5 3.5 0 000-7z"/></svg>
           </span>
-          Register Now
+          Sign Up
         </a>
       </div>
     </div>
@@ -1143,7 +1257,7 @@ body{overflow-x:clip}
     <div class="footer-grid">
       <div class="footer-brand">
         <a href="#" class="logo" style="color:#fff">YOUNG CREATORS ACCELERATOR</a>
-        <p>A 4-week summer program for kids ages 9–15 — where ideas become real projects, and creators leave with something they're proud of.</p>
+        <p>A 4-week summer program for kids ages 9-15, where ideas become real projects, and creators leave with something they're proud of.</p>
         <div class="socials">
           <a href="https://instagram.com/youngcreatorprogram" target="_blank" rel="noopener" aria-label="Instagram">
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
@@ -1187,6 +1301,70 @@ body{overflow-x:clip}
     </div>
   </div>
 </footer>
+
+<!-- ============ PRIVACY POLICY MODAL ============ -->
+<div class="modal" id="privacy-modal" role="dialog" aria-modal="true" aria-labelledby="privacy-title" hidden>
+  <div class="modal-card">
+    <div class="modal-head">
+      <h3 id="privacy-title">Privacy Policy &amp; Terms and Conditions</h3>
+      <button type="button" class="modal-close" aria-label="Close" data-modal-close>&times;</button>
+    </div>
+    <div class="modal-body">
+      <p><em>Last updated: April 26, 2026</em></p>
+      <p>Young Creator Launch Camp ("we," "us," or "our") respects the privacy of every family that registers for our program. Because our participants are children ages 9-15, we take extra care to keep personal information secure and to use it only for purposes directly related to running the program.</p>
+
+      <h4>Information We Collect</h4>
+      <p>When you register through this form we collect:</p>
+      <ul>
+        <li>Child's name, age, and grade</li>
+        <li>Parent or guardian email address</li>
+        <li>Selected project track</li>
+        <li>Any additional message you choose to share</li>
+        <li>Payment details processed securely through our third-party payment provider (we do not store full card numbers on our servers)</li>
+      </ul>
+
+      <h4>How We Use Your Information</h4>
+      <ul>
+        <li>To enroll your child in the program and confirm payment of the $500 program fee</li>
+        <li>To communicate session schedules, mentor introductions, and Demo Day details</li>
+        <li>To match your child with the right project track and small group</li>
+        <li>To respond to questions you submit through the form</li>
+      </ul>
+
+      <h4>Children's Privacy</h4>
+      <p>Registration is intended to be completed by a parent or legal guardian. We do not knowingly collect information directly from children under 13 outside of what is needed to deliver the program, and any work created by a child during the program is shared only with their consent (and a parent's consent where required).</p>
+
+      <h4>How We Share Information</h4>
+      <p>We do not sell or rent your information. We share it only with:</p>
+      <ul>
+        <li>Mentors and program staff who need it to teach and support your child</li>
+        <li>Trusted service providers (such as our form host and payment processor) who help us operate the program</li>
+        <li>Authorities, when legally required</li>
+      </ul>
+
+      <h4>Data Security</h4>
+      <p>Submissions are transmitted over encrypted connections and stored with reputable providers. We limit access to families' information to staff who need it to run the program.</p>
+
+      <h4>Your Choices</h4>
+      <p>You may request a copy of, correction to, or deletion of your family's information at any time by emailing <a href="mailto:info@creatorlaunchcamp.com">info@creatorlaunchcamp.com</a>. We'll honor verified requests within 30 days, except where we are required to retain records (for example, payment receipts).</p>
+
+      <h4>Terms and Conditions</h4>
+      <p>By submitting this registration form and paying the program fee, you agree to the following terms:</p>
+      <ul>
+        <li><strong>No Refunds.</strong> The $500 program fee is non-refundable. Once payment is made, fees will not be refunded for any reason, including missed sessions, withdrawal, schedule conflicts, or change of mind. Please make sure your child is committed to the four-week program before registering.</li>
+        <li><strong>Enrollment.</strong> A spot is only confirmed once payment has been received in full. Spots are limited and offered on a first-come, first-served basis.</li>
+        <li><strong>Code of Conduct.</strong> Participants are expected to treat mentors and peers with respect. We reserve the right to remove a participant from the program for repeated disruptive behavior, with no refund issued.</li>
+        <li><strong>Technology Requirements.</strong> Families are responsible for providing a working laptop or desktop, webcam, and stable internet connection for the online sessions.</li>
+        <li><strong>Project Ownership.</strong> Children retain ownership of the projects they create. By participating, you grant us permission to feature their work (with first name only) in promotional materials, unless you opt out in writing.</li>
+        <li><strong>Program Changes.</strong> We reserve the right to adjust schedules, mentors, or session formats as needed. We will give as much notice as possible of any changes.</li>
+        <li><strong>Liability.</strong> Young Creator Launch Camp is not responsible for any technical issues, internet outages, or hardware problems on the participant's side that may affect attendance.</li>
+      </ul>
+
+      <h4>Contact Us</h4>
+      <p>Questions about this policy? Reach out at <a href="mailto:info@creatorlaunchcamp.com">info@creatorlaunchcamp.com</a> and we'll get back to you within one business day.</p>
+    </div>
+  </div>
+</div>
 
 <script>
 // Program countdown
@@ -1266,7 +1444,8 @@ menuToggle?.addEventListener('click',()=>{
   }
 });
 
-// Formspree AJAX submission — keeps user on page and clears the form on success
+// Formspree AJAX submission, then redirect to Stripe Checkout
+const STRIPE_CHECKOUT_URL = 'https://buy.stripe.com/28EaEP0VIdXF2Qm8gl9EI00';
 const registerForm = document.getElementById('register-form');
 if(registerForm){
   const status = document.getElementById('form-status');
@@ -1279,16 +1458,19 @@ if(registerForm){
     const originalLabel = submitBtn.textContent;
     submitBtn.textContent = 'Sending…';
     try{
+      const formData = new FormData(registerForm);
+      const email = formData.get('email');
       const res = await fetch(registerForm.action, {
         method: 'POST',
-        body: new FormData(registerForm),
+        body: formData,
         headers: { 'Accept': 'application/json' }
       });
       if(res.ok){
-        registerForm.reset();
-        status.textContent = 'Thanks! Your registration has been sent.';
-        status.classList.add('is-success');
-        status.hidden = false;
+        const checkoutUrl = email
+          ? `${STRIPE_CHECKOUT_URL}?prefilled_email=${encodeURIComponent(email)}`
+          : STRIPE_CHECKOUT_URL;
+        window.location.replace(checkoutUrl);
+        return;
       } else {
         const data = await res.json().catch(() => ({}));
         const msg = (data.errors && data.errors.map(x => x.message).join(', ')) || 'Something went wrong. Please try again.';
@@ -1306,6 +1488,33 @@ if(registerForm){
     }
   });
 }
+
+// Privacy policy modal
+(function(){
+  const modal = document.getElementById('privacy-modal');
+  const link = document.getElementById('privacy-link');
+  if(!modal || !link) return;
+  const closers = modal.querySelectorAll('[data-modal-close]');
+
+  function open(e){
+    if(e) e.preventDefault();
+    modal.hidden = false;
+    requestAnimationFrame(() => modal.classList.add('is-open'));
+    document.body.classList.add('modal-open');
+  }
+  function close(){
+    modal.classList.remove('is-open');
+    document.body.classList.remove('modal-open');
+    setTimeout(() => { modal.hidden = true; }, 200);
+  }
+
+  link.addEventListener('click', open);
+  closers.forEach(btn => btn.addEventListener('click', close));
+  modal.addEventListener('click', e => { if(e.target === modal) close(); });
+  document.addEventListener('keydown', e => {
+    if(e.key === 'Escape' && modal.classList.contains('is-open')) close();
+  });
+})();
 </script>
 
 </body>
